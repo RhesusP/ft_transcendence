@@ -18,3 +18,7 @@ Je dois implémenter les fonctionnalités suivantes :
 
 Propose moi un modele de base de données pour ce projet.
 
+Liens utiles : 
+- https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu
+- https://pawamoy.github.io/posts/docker-compose-django-postgres-nginx/
+- 
