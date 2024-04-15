@@ -1,27 +1,46 @@
 services:
-  nginx:
-    build: ./nginx
-    ports:
-      - 1337:80
-    volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
-    depends_on:
-      - web
-    restart: on-failure
-
-  web:
-    build: ./web
-    command:
-      - sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic && gunicorn user_stats.wsgi:application --bind 0.0.0.0:8000"
-    volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
+  user-stats-web:
+    container_name: user-stats-web
+    build:
+      context: .
+      dockerfile: docker/django/Dockerfile
+#    ports:
+#      - "8000:8000"
     expose:
       - 8000
-    restart: on-failure
-
+    env_file:
+      - .env
+    depends_on:
+      - user-stats-db
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+  user-stats-db:
+    container_name: user-stats-db
+    build:
+      context: .
+      dockerfile: docker/postgres/Dockerfile
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB_USER_STATS=${POSTGRES_DB_USER_STATS}
+    ports:
+      - "${SQL_PORT}:5432"
+  user-stats-nginx:
+    container_name: user-stats-nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+        - "1337:80"
+    depends_on:
+      - user-stats-web
+    volumes:
+      - static_volume:/home/app/web/staticfiles
 volumes:
-  postgres_data:
-  static_volume:
-  media_volume:
+    postgres_data:
+    static_volume:
