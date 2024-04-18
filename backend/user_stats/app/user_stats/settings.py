@@ -75,12 +75,12 @@ WSGI_APPLICATION = 'user_stats.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.environ.get('POSTGRES_DB_USER_STATS', BASE_DIR / 'db.sqlite3'),
+        'ENGINE': os.environ.get('SQL_ENGINE'),
+        'NAME': os.environ.get('POSTGRES_DB_USER_STATS'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('SQL_HOST', 'localhost'),
-        'PORT': os.environ.get('SQL_PORT', '5432'),
+        'HOST': os.environ.get('SQL_HOST'),
+        'PORT': os.environ.get('SQL_PORT'),
     }
 }
 
