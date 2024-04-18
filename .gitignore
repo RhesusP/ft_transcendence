@@ -11,7 +11,6 @@ logs
 
 # Secrets
 .env
-.env.*
 .env.local
 
 # Subject
