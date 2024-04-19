@@ -15,3 +15,6 @@ logs
 
 # Subject
 *.subject.pdf
+
+# Frontend
+frontend/node_modules
