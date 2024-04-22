@@ -1,2 +1,2 @@
 FROM postgres:bullseye
-EXPOSE $SQL_PORT
+EXPOSE $USER_STATS_DB_PORT

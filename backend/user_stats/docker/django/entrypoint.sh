@@ -2,9 +2,8 @@
 
 # Wait for the database to be ready
 echo "Waiting for database..."
-echo "Host: $SQL_HOST"
-echo "Port: $SQL_PORT"
-while ! nc -z $SQL_HOST $SQL_PORT; do
+echo "Port: $USER_STATS_DB_PORT"
+while ! nc -z user_stats_db $USER_STATS_DB_PORT; do
   sleep 0.1
 done
 echo "Database ready"

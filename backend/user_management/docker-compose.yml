@@ -1,43 +1,58 @@
 services:
-  user-management-web:
-    container_name: user-management-web
+  user_management:
+    container_name: user_management
     build:
       context: .
       dockerfile: docker/django/Dockerfile
     expose:
-      - 8000
+      - 443
     env_file:
-      - .env
+      - ./../../.env
+    restart: on-failure
     depends_on:
-      - user-management-db
+      - user_management_db
     volumes:
       - static_volume:/home/app/web/staticfiles
-  user-management-db:
-    container_name: user-management-db
+    networks:
+      - transcendence_network
+      - user_management_network
+
+  user_management_db:
+    container_name: user_management_db
     build:
       context: .
       dockerfile: docker/postgres/Dockerfile
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - .env
+      - ./../../.env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB_USER_MANAGEMENT}
+      - POSTGRES_DB=user_management_db
     ports:
-      - "${SQL_PORT}:5432"
-  user-management-nginx:
-    container_name: user-management-nginx
+      - "${USER_MANAGEMENT_DB_PORT}:5432"
+    networks:
+      - user_management_network
+    restart: on-failure
+
+  user_management_nginx:
+    container_name: user_management_nginx
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-        - "1234:80"
+        - "8002:443"
+    expose:
+      - 443
+    restart: on-failure
     depends_on:
-      - user-management-web
+      - user_management
     volumes:
       - static_volume:/home/app/web/staticfiles
+    networks:
+      - transcendence_network
+      - user_management_network
 
 volumes:
     postgres_data:

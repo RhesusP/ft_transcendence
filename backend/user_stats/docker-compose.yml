@@ -1,45 +1,59 @@
 services:
-  user-stats-web:
-    container_name: user-stats-web
+  user_stats:
+    container_name: user_stats
     build:
       context: .
       dockerfile: docker/django/Dockerfile
-#    ports:
-#      - "8000:8000"
     expose:
-      - 8000
+      - 443
     env_file:
-      - .env
+      - ./../../.env
     depends_on:
-      - user-stats-db
+      - user_stats_db
+    restart: on-failure
     volumes:
       - static_volume:/home/app/web/staticfiles
-  user-stats-db:
-    container_name: user-stats-db
+    networks:
+      - user_stats_network
+      - transcendence_network
+
+  user_stats_db:
+    container_name: user_stats_db
     build:
       context: .
       dockerfile: docker/postgres/Dockerfile
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - .env
+      - ./../../.env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB_USER_STATS}
+      - POSTGRES_DB=user_stats_db
     ports:
-      - "${SQL_PORT}:5432"
-  user-stats-nginx:
-    container_name: user-stats-nginx
+      - "${USER_STATS_DB_PORT}:5432"
+    networks:
+      - user_stats_network
+    restart: on-failure
+
+  user_stats_nginx:
+    container_name: user_stats_nginx
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-        - "1234:80"
+        - "8001:443"
+    expose:
+      - 443
+    restart: on-failure
     depends_on:
-      - user-stats-web
+      - user_stats
     volumes:
       - static_volume:/home/app/web/staticfiles
+    networks:
+      - user_stats_network
+      - transcendence_network
+
 volumes:
-    postgres_data:
-    static_volume:
+  postgres_data:
+  static_volume:

@@ -1,0 +1,78 @@
+services:
+
+###################     FRONTEND     ###################
+  frontend:
+    container_name: frontend
+    extends:
+      file: ./frontend/docker-compose.yml
+      service: frontend
+    depends_on:
+      user_management:
+        condition: service_started
+      user_stats:
+        condition: service_started
+
+###################     USER_MANAGEMENT     ###################
+  user_management:
+    container_name: user_management
+    extends:
+      file: ./backend/user_management/docker-compose.yml
+      service: user_management
+    depends_on:
+      user_management_db:
+        condition: service_started  
+
+  user_management_db:
+    container_name: user_management_db
+    extends:
+      file: ./backend/user_management/docker-compose.yml
+      service: user_management_db
+  
+  user_management_nginx:
+    container_name: user_management_nginx
+    extends:
+      file: ./backend/user_management/docker-compose.yml
+      service: user_management_nginx
+    depends_on:
+      user_management:
+        condition: service_started
+
+###################     USER_STATS     ###################
+  user_stats:
+    container_name: user_stats
+    extends:
+      file: ./backend/user_stats/docker-compose.yml
+      service: user_stats
+    depends_on:
+      user_stats_db:
+        condition: service_started
+
+  user_stats_db:
+    container_name: user_stats_db
+    extends:
+      file: ./backend/user_stats/docker-compose.yml
+      service: user_stats_db
+  
+  user_stats_nginx:
+    container_name: user_stats_nginx
+    extends:
+      file: ./backend/user_stats/docker-compose.yml
+      service: user_stats_nginx
+    depends_on:
+      user_stats:
+        condition: service_started
+
+networks:
+  transcendence_network:
+    driver: bridge
+  frontend_network:
+    driver: bridge
+  user_management_network:
+    driver: bridge
+  user_stats_network:
+    driver: bridge
+
+# TODO Split volumes by microservices and by containers (media / static / db)
+volumes:
+  postgres_data:
+  static_volume:

@@ -75,12 +75,12 @@ WSGI_APPLICATION = 'user_stats.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE'),
-        'NAME': os.environ.get('POSTGRES_DB_USER_STATS'),
+        'ENGINE': "django.db.backends.postgresql",
+        'NAME': 'user_stats_db',
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('SQL_HOST'),
-        'PORT': os.environ.get('SQL_PORT'),
+        'HOST': 'user_stats_db',
+        'PORT': os.environ.get('USER_STATS_DB_PORT'),
     }
 }
 
