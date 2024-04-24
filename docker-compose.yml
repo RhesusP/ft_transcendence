@@ -12,6 +12,31 @@ services:
       user_stats:
         condition: service_started
 
+###################       MATCHS STATS      ###################
+  matchs:
+    container_name: matchs
+    extends:
+      file: ./backend/matchs/docker-compose.yml
+      service: matchs
+    depends_on:
+      matchs_db:
+        condition: service_started
+
+  matchs_db:
+    container_name: matchs_db
+    extends:
+      file: ./backend/matchs/docker-compose.yml
+      service: matchs_db
+
+  matchs_nginx:
+    container_name: matchs_nginx
+    extends:
+      file: ./backend/matchs/docker-compose.yml
+      service: matchs_nginx
+    depends_on:
+      matchs:
+        condition: service_started
+
 ###################     USER_MANAGEMENT     ###################
   user_management:
     container_name: user_management
@@ -70,6 +95,8 @@ networks:
   user_management_network:
     driver: bridge
   user_stats_network:
+    driver: bridge
+  matchs_network:
     driver: bridge
 
 # TODO Split volumes by microservices and by containers (media / static / db)

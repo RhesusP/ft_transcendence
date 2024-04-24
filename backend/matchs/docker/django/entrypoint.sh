@@ -2,8 +2,8 @@
 
 # Wait for the database to be ready
 echo "Waiting for database..."
-echo "Port: $USER_MANAGEMENT_DB_PORT"
-while ! nc -z user_management_db $USER_MANAGEMENT_DB_PORT; do
+echo "Port: $MATCHS_DB_PORT"
+while ! nc -z matchs_db $MATCHS_DB_PORT; do
   sleep 0.1
 done
 echo "Database ready"
@@ -13,4 +13,4 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --no-input --clear
 
-exec "gunicorn" "user_management.wsgi:application" "--bind" "0.0.0.0:8002"
+exec "gunicorn" "user_stats.wsgi:application" "--bind" "0.0.0.0:8003"

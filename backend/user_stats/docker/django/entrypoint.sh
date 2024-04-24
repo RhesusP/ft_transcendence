@@ -8,7 +8,7 @@ while ! nc -z user_stats_db $USER_STATS_DB_PORT; do
 done
 echo "Database ready"
 
-python manage.py flush --no-input
+#python manage.py flush --no-input
 python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --no-input --clear

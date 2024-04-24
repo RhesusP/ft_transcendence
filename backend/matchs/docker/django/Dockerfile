@@ -20,4 +20,4 @@ COPY ./docker/django/entrypoint.sh .
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["bash" , "entrypoint.sh"]
 
-EXPOSE 8002
+EXPOSE 8003

@@ -1,6 +1,6 @@
 services:
-  user_management:
-    container_name: user_management
+  matchs:
+    container_name: matchs
     build:
       context: .
       dockerfile: docker/django/Dockerfile
@@ -10,15 +10,15 @@ services:
       - ./../../.env
     restart: on-failure
     depends_on:
-      - user_management_db
+      - matchs_db
     volumes:
       - static_volume:/home/app/web/staticfiles
     networks:
       - transcendence_network
-      - user_management_network
+      - matchs_network
 
-  user_management_db:
-    container_name: user_management_db
+  matchs_db:
+    container_name: matchs_db
     build:
       context: .
       dockerfile: docker/postgres/Dockerfile
@@ -29,31 +29,31 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=user_management_db
+      - POSTGRES_DB=matchs_db
     ports:
-      - "${USER_MANAGEMENT_DB_PORT}:5433"
+      - "${MATCHS_DB_PORT}:5434"
     networks:
-      - user_management_network
+      - matchs_network
     restart: on-failure
 
-  user_management_nginx:
-    container_name: user_management_nginx
+  matchs_nginx:
+    container_name: matchs_nginx
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-        - "8002:443"
+      - "8003:443"
     expose:
       - 443
     restart: on-failure
     depends_on:
-      - user_management
+      - matchs
     volumes:
       - static_volume:/home/app/web/staticfiles
     networks:
       - transcendence_network
-      - user_management_network
+      - matchs_network
 
 volumes:
-    postgres_data:
-    static_volume:
+  postgres_data:
+  static_volume:
