@@ -15,7 +15,7 @@ services:
       - static_volume:/home/app/web/staticfiles
     networks:
       - user_stats_network
-      - transcendence_network
+#      - transcendence_network
 
   user_stats_db:
     container_name: user_stats_db

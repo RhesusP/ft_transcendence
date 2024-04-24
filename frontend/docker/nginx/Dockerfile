@@ -7,5 +7,5 @@ RUN openssl req -x509 -nodes -newkey rsa:4096 -out /etc/nginx/ssl/transcendence.
 COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./app /usr/share/nginx/html
 
-EXPOSE 443
+EXPOSE 8000
 CMD ["nginx", "-g", "daemon off;"]

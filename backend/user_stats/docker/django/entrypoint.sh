@@ -4,7 +4,7 @@
 echo "Waiting for database..."
 echo "Port: $USER_STATS_DB_PORT"
 while ! nc -z user_stats_db $USER_STATS_DB_PORT; do
-  sleep 0.1
+  sleep 20
 done
 echo "Database ready"
 
@@ -12,5 +12,6 @@ echo "Database ready"
 python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --no-input --clear
+python manage.py createsuperuser --noinput
 
 exec "gunicorn" "user_stats.wsgi:application" "--bind" "0.0.0.0:8000"
