@@ -1,4 +1,4 @@
 .venv
-.env
+../user_management/.env
 .git
 .gitignore

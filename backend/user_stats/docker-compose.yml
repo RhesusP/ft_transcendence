@@ -32,6 +32,9 @@ services:
       - POSTGRES_DB=user_stats_db
     ports:
       - "${USER_STATS_DB_PORT}:5432"
+    expose:
+      - 5432
+      - 5433
     networks:
       - user_stats_network
     restart: on-failure
